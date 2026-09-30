@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ASTS Bahasa Inggris Kelas 9 - Safe CBT</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background-color: #f4f6f9; }
+
+    /* Halaman Awal */
+    .start-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-align: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      text-align: center;
+      background: #ffffff;
+    }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 480px;
+      width: 100%;
+    }
+    h2 { color: #1b365d; margin-bottom: 10px; font-size: 20px; }
+    p { color: #555; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+    
+    .btn-start {
+      background: #1b365d;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      transition: 0.2s;
+    }
+    .btn-start:hover { background: #0f2342; }
+
+    /* Area Ujian & Iframe Google Form */
+    #examArea {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    /* Indicator Pelanggaran Melayang */
+    .violation-badge {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 9999;
+      background: #ffc107;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Layar Pengunci / Peringatan */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.96);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      padding: 24px;
+      text-align: center;
+    }
+    .overlay h1 { color: #ef4444; margin-bottom: 12px; font-size: 22px; }
+    .overlay p { color: #cbd5e1; margin-bottom: 24px; font-size: 14px; line-height: 1.6; }
+
+    .btn-action {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 10px;
+    }
+
+    .btn-admin { background: #16a34a; }
+    .btn-wa { background: #25d366; text-decoration: none; display: inline-block; text-align: center; color: white; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- 1. HALAMAN KONFIRMASI MULAI -->
+  <div id="startScreen" class="start-container">
+    <div class="card">
+      <h2>ASTS BAHASA INGGRIS KELAS 9</h2>
+      <p><b>Petunjuk Keamanan Ujian:</b><br>
+      • Ujian wajib dalam mode layar penuh (*Fullscreen*).<br>
+      • Dilarang membuka tab lain, berpindah aplikasi, atau mengecilkan browser.<br>
+      • Maksimal pelanggaran adalah **3 kali**. Lebih dari itu ujian akan terkunci permanen.</p>
+      <button class="btn-start" onclick="startExam()">Mulai & Layar Penuh</button>
+    </div>
+  </div>
+
+  <!-- 2. AREA INTEGRASI GOOGLE FORM -->
+  <div id="examArea" class="hidden">
+    <div class="violation-badge">
+      Pelanggaran: <span id="violationCount">0</span> / 3
+    </div>
+    
+    <!-- LINK GOOGLE FORM ANDA DIINTEGRASIKAN DI SINI -->
+    <iframe id="googleFormIframe" src="" allow="fullscreen">Loading Form...</iframe>
+  </div>
+
+  <!-- 3. OVERLAY PERINGATAN / DIBLOKIR -->
+  <div id="lockOverlay" class="overlay hidden">
+    <h1 id="lockTitle">AKSES DIBLOKIR!</h1>
+    <p id="lockMessage">Terdeteksi melakukan pelanggaran.</p>
+    
+    <!-- Tombol Masuk Kembali (Untuk Pelanggaran 1 & 2) -->
+    <button id="btnResume" onclick="reEnterFullscreen()" class="btn-action">Kembali ke Ujian</button>
+    
+    <!-- Panel Kontak & Reset (Jika Terkunci di Pelanggaran ke-3) -->
+    <div id="adminArea" class="hidden" style="width: 100%; max-width: 280px;">
+      <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20akun%20ujian%20ASTS%20Bahasa%20Inggris%20saya%20terkunci" target="_blank" class="btn-action btn-wa">
+        💬 Hubungi Admin WA
+      </a>
+      <button class="btn-action btn-admin" onclick="resetExamByAdmin()">Reset Ujian (Proktor/Admin)</button>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================
+    // PASTE LINK FORMULIR SISWA GOOGLE FORM ANDA DI SINI
+    // (Ganti tautan di bawah dengan link Google Form Anda)
+    // =========================================================
+    const GOOGLE_FORM_URL = "ISI_DENGAN_LINK_FORM_ANDA"; 
+
+    // PIN Rahasia Admin untuk Reset Ujian Siswa
+    const ADMIN_PIN = "123456"; 
+
+    let violationCount = 0;
+    const maxViolations = 3;
+    let isExamActive = false;
+
+    // Cek memori browser jika sebelumnya pernah terkunci
+    window.onload = function() {
+      let savedViolations = localStorage.getItem("asts_violations");
+      let savedStatus = localStorage.getItem("asts_status");
+
+      if (savedViolations) {
+        violationCount = parseInt(savedViolations);
+        document.getElementById("violationCount").innerText = violationCount;
+      }
+
+      if (savedStatus === "LOCKED") {
+        lockExamPermanently();
+      }
+    };
+
+    // Fungsi Memulai Ujian
+    function startExam() {
+      if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL === "https://forms.gle/tQghNyXVRm5HUV6PA") {
+        alert("PERHATIAN GURU: Link Google Form belum dimasukkan ke dalam script!");
+        return;
+      }
+
+      document.getElementById("googleFormIframe").src = GOOGLE_FORM_URL;
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("examArea").classList.remove("hidden");
+      
+      requestFullscreen();
+      isExamActive = true;
+      setupSecurityListeners();
+    }
+
+    // Mengaktifkan Mode Fullscreen
+    function requestFullscreen() {
+      let elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    }
+
+    // Pendeteksi Kecurangan
+    function setupSecurityListeners() {
+      // 1. Deteksi Pindah Tab / Minimalkan Browser
+      document.addEventListener("visibilitychange", function() {
+        if (document.hidden && isExamActive) {
+          registerViolation("Terdeteksi membuka tab baru atau keluar dari aplikasi browser!");
+        }
+      });
+
+      // 2. Deteksi Keluar Fullscreen
+      document.addEventListener("fullscreenchange", function() {
+        if (!document.fullscreenElement && isExamActive) {
+          registerViolation("Terdeteksi keluar dari mode layar penuh (Fullscreen)!");
+        }
+      });
+
+      // 3. Deteksi Kehilangan Fokus Layar
+      window.addEventListener("blur", function() {
+        if (isExamActive) {
+          registerViolation("Terdeteksi mengalihkan layar HP / membuka aplikasi lain!");
+        }
+      });
+    }
+
+    // Pencatat Pelanggaran
+    function registerViolation(reason) {
+      if (!isExamActive) return;
+
+      violationCount++;
+      localStorage.setItem("asts_violations", violationCount);
+      document.getElementById("violationCount").innerText = violationCount;
+
+      if (violationCount >= maxViolations) {
+        lockExamPermanently();
+      } else {
+        showTemporaryLock(reason);
+      }
+    }
+
+    // Tampilan Peringatan Sementara (Pelanggaran 1 & 2)
+    function showTemporaryLock(reason) {
+      let overlay = document.getElementById("lockOverlay");
+      document.getElementById("lockTitle").innerText = "PERINGATAN PELANGGARAN!";
+      document.getElementById("lockMessage").innerText = reason + "\n\nPelanggaran ke-" + violationCount + " dari " + maxViolations + ". Jika mencapai " + maxViolations + " kali, ujian akan terblokir!";
+      
+      document.getElementById("btnResume").classList.remove("hidden");
+      document.getElementById("adminArea").classList.add("hidden");
+      overlay.classList.remove("hidden");
+    }
+
+    // Masuk kembali ke mode Fullscreen
+    function reEnterFullscreen() {
+      requestFullscreen();
+      document.getElementById("lockOverlay").classList.add("hidden");
+    }
+
+    // Penguncian Permanen (Pelanggaran ke-3)
+    function lockExamPermanently() {
+      isExamActive = false;
+      localStorage.setItem("asts_status", "LOCKED");
+
+      let overlay = document.getElementById("lockOverlay");
+      document.getElementById("lockTitle").innerText = "AKSES UJIAN DIBLOKIR!";
+      document.getElementById("lockMessage").innerText = "Anda telah melanggar aturan ujian sebanyak 3 kali.\n\nSilakan hubungi Proktor / Admin untuk pembukaan blokir.";
+
+      document.getElementById("btnResume").classList.add("hidden");
+      document.getElementById("adminArea").classList.remove("hidden");
+      overlay.classList.remove("hidden");
+    }
+
+    // Reset Ujian oleh Admin
+    function resetExamByAdmin() {
+      let inputPIN = prompt("Masukkan PIN Rahasia Admin / Pengawas:");
+
+      if (inputPIN === ADMIN_PIN) {
+        violationCount = 0;
+        localStorage.removeItem("asts_violations");
+        localStorage.removeItem("asts_status");
+        
+        alert("Siswa berhasil di-reset! Ujian dimuat kembali.");
+        document.getElementById("lockOverlay").classList.add("hidden");
+        document.getElementById("violationCount").innerText = 0;
+        startExam();
+      } else if (inputPIN !== null) {
+        alert("PIN Admin Salah!");
+      }
+    }
+  </script>
+</body>
+</html>
