@@ -208,26 +208,19 @@
       }
     }
 
-    // Pendeteksi Kecurangan
+    // Pendeteksi Kecurangan (Akurat & Tidak Terkecoh Klik Google Form)
     function setupSecurityListeners() {
-      // 1. Deteksi Pindah Tab / Minimalkan Browser
+      // 1. Deteksi Pindah Tab / Minimalkan Browser / Buka Aplikasi Lain
       document.addEventListener("visibilitychange", function() {
         if (document.hidden && isExamActive) {
-          registerViolation("Terdeteksi membuka tab baru atau keluar dari aplikasi browser!");
+          registerViolation("Terdeteksi membuka tab baru, mengecilkan browser, atau keluar aplikasi!");
         }
       });
 
-      // 2. Deteksi Keluar Fullscreen
+      // 2. Deteksi Keluar dari Mode Layar Penuh (Fullscreen)
       document.addEventListener("fullscreenchange", function() {
         if (!document.fullscreenElement && isExamActive) {
           registerViolation("Terdeteksi keluar dari mode layar penuh (Fullscreen)!");
-        }
-      });
-
-      // 3. Deteksi Kehilangan Fokus Layar
-      window.addEventListener("blur", function() {
-        if (isExamActive) {
-          registerViolation("Terdeteksi mengalihkan layar HP / membuka aplikasi lain!");
         }
       });
     }
