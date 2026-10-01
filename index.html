@@ -133,7 +133,7 @@
     Pelanggaran: <span id="violationCount">0</span> / 3
   </div>
   
-  <iframe id="googleFormIframe" src="https://forms.gle/tQgHNyXVRm5HUV6PA" allow="fullscreen">Loading Form...</iframe>
+  <iframe id="googleFormIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform" allow="fullscreen">Loading Form...</iframe>
 </div>
 
   <!-- 3. OVERLAY PERINGATAN / DIBLOKIR -->
@@ -158,7 +158,7 @@
     // PASTE LINK FORMULIR SISWA GOOGLE FORM ANDA DI SINI
     // (Ganti tautan di bawah dengan link Google Form Anda)
     // =========================================================
-    const GOOGLE_FORM_URL = "https://forms.gle/tQgHNyXVRm5HUV6PA"; 
+    const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform"; 
 
     // PIN Rahasia Admin untuk Reset Ujian Siswa
     const ADMIN_PIN = "123456"; 
@@ -184,7 +184,7 @@
 
     // Fungsi Memulai Ujian
     function startExam() {
-      if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL === "https://forms.gle/tQghNyXVRm5HUV6PA") {
+      if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL === "https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform") {
         alert("PERHATIAN GURU: Link Google Form belum dimasukkan ke dalam script!");
         return;
       }
