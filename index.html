@@ -13,7 +13,6 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-align: center;
       align-items: center;
       height: 100vh;
       padding: 20px;
@@ -120,21 +119,21 @@
     <div class="card">
       <h2>ASTS BAHASA INGGRIS KELAS 9</h2>
       <p><b>Petunjuk Keamanan Ujian:</b><br>
-      • Ujian wajib dalam mode layar penuh (*Fullscreen*).<br>
+      • Ujian wajib dalam mode layar penuh (<i>Fullscreen</i>).<br>
       • Dilarang membuka tab lain, berpindah aplikasi, atau mengecilkan browser.<br>
-      • Maksimal pelanggaran adalah **3 kali**. Lebih dari itu ujian akan terkunci permanen.</p>
+      • Maksimal pelanggaran adalah <b>3 kali</b>. Lebih dari itu ujian akan terkunci permanen.</p>
       <button class="btn-start" onclick="startExam()">Mulai & Layar Penuh</button>
     </div>
   </div>
 
   <!-- 2. AREA INTEGRASI GOOGLE FORM -->
-<div id="examArea" class="hidden">
-  <div class="violation-badge">
-    Pelanggaran: <span id="violationCount">0</span> / 3
+  <div id="examArea" class="hidden">
+    <div class="violation-badge">
+      Pelanggaran: <span id="violationCount">0</span> / 3
+    </div>
+    
+    <iframe id="googleFormIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform" allow="fullscreen">Loading Form...</iframe>
   </div>
-  
-  <iframe id="googleFormIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform" allow="fullscreen">Loading Form...</iframe>
-</div>
 
   <!-- 3. OVERLAY PERINGATAN / DIBLOKIR -->
   <div id="lockOverlay" class="overlay hidden">
@@ -155,8 +154,7 @@
 
   <script>
     // =========================================================
-    // PASTE LINK FORMULIR SISWA GOOGLE FORM ANDA DI SINI
-    // (Ganti tautan di bawah dengan link Google Form Anda)
+    // LINK FORMULIR GOOGLE FORM SISWA
     // =========================================================
     const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform"; 
 
@@ -184,7 +182,7 @@
 
     // Fungsi Memulai Ujian
     function startExam() {
-      if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL === "https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform") {
+      if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL.trim() === "" || GOOGLE_FORM_URL.includes("ISI_DENGAN_LINK")) {
         alert("PERHATIAN GURU: Link Google Form belum dimasukkan ke dalam script!");
         return;
       }
