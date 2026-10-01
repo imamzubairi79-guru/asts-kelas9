@@ -4,68 +4,143 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ASTS Bahasa Inggris Kelas 9 - Safe CBT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body, html { width: 100%; height: 100%; overflow: hidden; background-color: #f4f6f9; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; }
 
-    /* Halaman Awal */
+    /* Halaman Awal Modern */
     .start-container {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       padding: 20px;
-      text-align: center;
-      background: #ffffff;
+      background: radial-gradient(circle at top left, #1e293b, #0f172a);
     }
+    
     .card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 36px 28px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
       max-width: 480px;
       width: 100%;
+      text-align: center;
+      color: #f8fafc;
     }
-    h2 { color: #1b365d; margin-bottom: 10px; font-size: 20px; }
-    p { color: #555; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-    
+
+    .badge-title {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h2 { color: #ffffff; font-size: 22px; font-weight: 800; margin-bottom: 16px; }
+
+    .info-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: left;
+      margin-bottom: 24px;
+      border-left: 4px solid #3b82f6;
+    }
+
+    .info-box ul {
+      list-style-type: none;
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .info-box li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .info-box li span { margin-right: 8px; font-size: 14px; }
+    .info-box li:last-child { margin-bottom: 0; }
+
     .btn-start {
-      background: #1b365d;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: white;
       border: none;
-      padding: 14px 24px;
+      padding: 16px 24px;
       font-size: 16px;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 700;
       width: 100%;
-      transition: 0.2s;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
     }
-    .btn-start:hover { background: #0f2342; }
 
-    /* Area Ujian & Iframe Google Form */
+    .btn-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.5);
+    }
+
+    /* Area Ujian & Iframe */
     #examArea {
       width: 100%;
       height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
+      background: #f8fafc;
     }
-    
-    /* Indicator Pelanggaran Melayang */
-    .violation-badge {
+
+    /* Floating Status Bar */
+    .status-bar {
       position: fixed;
       top: 12px;
-      right: 12px;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 9999;
-      background: #ffc107;
-      color: #000;
+      display: flex;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(10px);
       padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: bold;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #f8fafc;
       font-size: 13px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-weight: 700;
+    }
+
+    .timer-badge { color: #38bdf8; }
+    .violation-badge { color: #fbbf24; }
+    .status-divider { color: rgba(255, 255, 255, 0.2); }
+
+    /* Timer Warning saat < 5 Menit */
+    .timer-warning {
+      color: #ef4444 !important;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
 
     iframe {
@@ -79,7 +154,8 @@
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.96);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
       color: white;
       display: flex;
       flex-direction: column;
@@ -89,25 +165,96 @@
       padding: 24px;
       text-align: center;
     }
-    .overlay h1 { color: #ef4444; margin-bottom: 12px; font-size: 22px; }
-    .overlay p { color: #cbd5e1; margin-bottom: 24px; font-size: 14px; line-height: 1.6; }
+
+    .overlay h1 { color: #f87171; margin-bottom: 12px; font-size: 24px; font-weight: 800; }
+    .overlay p { color: #94a3b8; margin-bottom: 24px; font-size: 14px; line-height: 1.6; max-width: 400px; white-space: pre-line; }
 
     .btn-action {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .btn-admin { background: linear-gradient(135deg, #16a34a, #15803d); }
+    .btn-wa { background: linear-gradient(135deg, #22c55e, #16a34a); text-decoration: none; display: inline-block; text-align: center; color: white; }
+
+    /* Modal Input PIN Rahasia Tertutup (*) */
+    .pin-modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .pin-card {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+
+    .pin-card h3 { color: #f8fafc; font-size: 18px; margin-bottom: 8px; }
+    .pin-card p { color: #94a3b8; font-size: 12px; margin-bottom: 16px; }
+
+    .pin-input {
+      width: 100%;
+      padding: 14px;
+      font-size: 20px;
+      letter-spacing: 8px;
+      text-align: center;
+      border-radius: 10px;
+      border: 2px solid #3b82f6;
+      background: #0f172a;
+      color: #ffffff;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .pin-btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-pin-submit {
+      flex: 1;
+      padding: 12px;
       background: #2563eb;
       color: white;
       border: none;
-      padding: 12px 24px;
-      font-size: 15px;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
-      width: 100%;
-      max-width: 280px;
-      margin-bottom: 10px;
     }
 
-    .btn-admin { background: #16a34a; }
-    .btn-wa { background: #25d366; text-decoration: none; display: inline-block; text-align: center; color: white; }
+    .btn-pin-cancel {
+      flex: 1;
+      padding: 12px;
+      background: #475569;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
     .hidden { display: none !important; }
   </style>
@@ -117,19 +264,31 @@
   <!-- 1. HALAMAN KONFIRMASI MULAI -->
   <div id="startScreen" class="start-container">
     <div class="card">
-      <h2>ASTS BAHASA INGGRIS KELAS 9</h2>
-      <p><b>Petunjuk Keamanan Ujian:</b><br>
-      • Ujian wajib dalam mode layar penuh (<i>Fullscreen</i>).<br>
-      • Dilarang membuka tab lain, berpindah aplikasi, atau mengecilkan browser.<br>
-      • Maksimal pelanggaran adalah <b>3 kali</b>. Lebih dari itu ujian akan terkunci permanen.</p>
-      <button class="btn-start" onclick="startExam()">Mulai & Layar Penuh</button>
+      <span class="badge-title">Safe CBT System</span>
+      <h2>ASTS Bahasa Inggris Kelas 8</h2>
+      
+      <div class="info-box">
+        <ul>
+          <li><span>⏱️</span> <b>Durasi Ujian:</b> 80 Menit</li>
+          <li><span>🖥️</span> <b>Mode Layar:</b> Wajib Fullscreen</li>
+          <li><span>⚠️</span> <b>Sanksi:</b> Keluar/Pindah Tab max 3x</li>
+        </ul>
+      </div>
+
+      <button class="btn-start" onclick="startExam()">Mulai & Layar Penuh 🚀</button>
     </div>
   </div>
 
-  <!-- 2. AREA INTEGRASI GOOGLE FORM -->
+  <!-- 2. AREA INTEGRASI GOOGLE FORM & FLOATING STATUS BAR -->
   <div id="examArea" class="hidden">
-    <div class="violation-badge">
-      Pelanggaran: <span id="violationCount">0</span> / 3
+    <div class="status-bar">
+      <div class="status-item timer-badge">
+        ⏳ <span id="timerDisplay">80:00</span>
+      </div>
+      <span class="status-divider">|</span>
+      <div class="status-item violation-badge">
+        ⚠️ Pelanggaran: <span id="violationCount">0</span> / 3
+      </div>
     </div>
     
     <iframe id="googleFormIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform" allow="fullscreen">Loading Form...</iframe>
@@ -140,32 +299,43 @@
     <h1 id="lockTitle">AKSES DIBLOKIR!</h1>
     <p id="lockMessage">Terdeteksi melakukan pelanggaran.</p>
     
-    <!-- Tombol Masuk Kembali (Untuk Pelanggaran 1 & 2) -->
-    <button id="btnResume" onclick="reEnterFullscreen()" class="btn-action">Kembali ke Ujian</button>
+    <button id="btnResume" onclick="reEnterFullscreen()" class="btn-action">Kembali ke Ujian 🔄</button>
     
-    <!-- Panel Kontak & Reset (Jika Terkunci di Pelanggaran ke-3) -->
     <div id="adminArea" class="hidden" style="width: 100%; max-width: 280px;">
-      <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20akun%20ujian%20ASTS%20Bahasa%20Inggris%20saya%20terkunci" target="_blank" class="btn-action btn-wa">
-        💬 Hubungi Admin WA
+      <a href="https://wa.me/6281324912264?text=Halo%20Admin,%20akun%20ujian%20ASTS%20Bahasa%20Inggris%20saya%20terkunci" target="_blank" class="btn-action btn-wa">
+        💬 Menghadap Pak Imam minta reset
       </a>
-      <button class="btn-action btn-admin" onclick="resetExamByAdmin()">Reset Ujian (Proktor/Admin)</button>
+      <button class="btn-action btn-admin" onclick="openPinModal()">Reset Ujian (Proktor)</button>
+    </div>
+  </div>
+
+  <!-- 4. MODAL POP-UP MASUKAN PIN TERTUTUP -->
+  <div id="pinModal" class="pin-modal hidden">
+    <div class="pin-card">
+      <h3>PIN Rahasia Proktor</h3>
+      <p>Masukkan PIN untuk membuka kunci ujian siswa</p>
+      <input type="password" id="adminPinInput" class="pin-input" placeholder="••••••" maxlength="10">
+      <div class="pin-btn-group">
+        <button class="btn-pin-cancel" onclick="closePinModal()">Batal</button>
+        <button class="btn-pin-submit" onclick="submitAdminPin()">Verifikasi</button>
+      </div>
     </div>
   </div>
 
   <script>
     // =========================================================
-    // LINK FORMULIR GOOGLE FORM SISWA
+    // KONFIGURASI UJIAN
     // =========================================================
     const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSck7puRBtbtTe-cY-UV6UM7vDdIPjKy-KOmgEeWkHXht2V5ow/viewform"; 
-
-    // PIN Rahasia Admin untuk Reset Ujian Siswa
     const ADMIN_PIN = "123456"; 
+    const EXAM_DURATION_MINUTES = 80; // Durasi Ujian dalam Menit
 
     let violationCount = 0;
     const maxViolations = 3;
     let isExamActive = false;
+    let timerInterval = null;
+    let timeRemaining = EXAM_DURATION_MINUTES * 60; // Konversi ke Detik
 
-    // Cek memori browser jika sebelumnya pernah terkunci
     window.onload = function() {
       let savedViolations = localStorage.getItem("asts_violations");
       let savedStatus = localStorage.getItem("asts_status");
@@ -176,11 +346,13 @@
       }
 
       if (savedStatus === "LOCKED") {
-        lockExamPermanently();
+        lockExamPermanently("Anda telah melanggar aturan ujian sebanyak 3 kali.\n\nSilakan menghadap Pak Imam / Admin untuk pembukaan blokir.");
+      } else if (savedStatus === "TIME_OUT") {
+        lockExamPermanently("Waktu pengerjaan ujian (80 menit) telah habis!");
       }
     };
 
-    // Fungsi Memulai Ujian
+    // Memulai Ujian & Timer
     function startExam() {
       if (!GOOGLE_FORM_URL || GOOGLE_FORM_URL.trim() === "" || GOOGLE_FORM_URL.includes("ISI_DENGAN_LINK")) {
         alert("PERHATIAN GURU: Link Google Form belum dimasukkan ke dalam script!");
@@ -194,6 +366,46 @@
       requestFullscreen();
       isExamActive = true;
       setupSecurityListeners();
+      startTimer();
+    }
+
+    // Fungsi Timer Mundur
+    function startTimer() {
+      let savedEndTime = localStorage.getItem("asts_end_time");
+      
+      if (!savedEndTime) {
+        let endTime = Date.now() + timeRemaining * 1000;
+        localStorage.setItem("asts_end_time", endTime);
+      }
+
+      timerInterval = setInterval(function() {
+        let savedEndTime = parseInt(localStorage.getItem("asts_end_time"));
+        let now = Date.now();
+        let diffSeconds = Math.floor((savedEndTime - now) / 1000);
+
+        if (diffSeconds <= 0) {
+          clearInterval(timerInterval);
+          document.getElementById("timerDisplay").innerText = "00:00";
+          localStorage.setItem("asts_status", "TIME_OUT");
+          lockExamPermanently("Waktu pengerjaan ujian (80 menit) telah habis!\n\nSilakan klik kirim pada Google Form jika sudah selesai.");
+          return;
+        }
+
+        let minutes = Math.floor(diffSeconds / 60);
+        let seconds = diffSeconds % 60;
+
+        let formattedTime = 
+          (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+          (seconds < 10 ? "0" + seconds : seconds);
+
+        let timerElement = document.getElementById("timerDisplay");
+        timerElement.innerText = formattedTime;
+
+        // Peringatan Merah saat waktu < 5 menit
+        if (diffSeconds < 300) {
+          timerElement.parentElement.classList.add("timer-warning");
+        }
+      }, 1000);
     }
 
     // Mengaktifkan Mode Fullscreen
@@ -208,16 +420,14 @@
       }
     }
 
-    // Pendeteksi Kecurangan (Akurat & Tidak Terkecoh Klik Google Form)
+    // Pendeteksi Kecurangan
     function setupSecurityListeners() {
-      // 1. Deteksi Pindah Tab / Minimalkan Browser / Buka Aplikasi Lain
       document.addEventListener("visibilitychange", function() {
         if (document.hidden && isExamActive) {
           registerViolation("Terdeteksi membuka tab baru, mengecilkan browser, atau keluar aplikasi!");
         }
       });
 
-      // 2. Deteksi Keluar dari Mode Layar Penuh (Fullscreen)
       document.addEventListener("fullscreenchange", function() {
         if (!document.fullscreenElement && isExamActive) {
           registerViolation("Terdeteksi keluar dari mode layar penuh (Fullscreen)!");
@@ -234,13 +444,13 @@
       document.getElementById("violationCount").innerText = violationCount;
 
       if (violationCount >= maxViolations) {
-        lockExamPermanently();
+        lockExamPermanently("Anda telah melanggar aturan ujian sebanyak 3 kali.\n\nSilakan menghadap Pak Imam / Admin untuk pembukaan blokir.");
       } else {
         showTemporaryLock(reason);
       }
     }
 
-    // Tampilan Peringatan Sementara (Pelanggaran 1 & 2)
+    // Peringatan Sementara (Pelanggaran 1 & 2)
     function showTemporaryLock(reason) {
       let overlay = document.getElementById("lockOverlay");
       document.getElementById("lockTitle").innerText = "PERINGATAN PELANGGARAN!";
@@ -251,41 +461,58 @@
       overlay.classList.remove("hidden");
     }
 
-    // Masuk kembali ke mode Fullscreen
     function reEnterFullscreen() {
       requestFullscreen();
       document.getElementById("lockOverlay").classList.add("hidden");
     }
 
-    // Penguncian Permanen (Pelanggaran ke-3)
-    function lockExamPermanently() {
+    // Penguncian Permanen
+    function lockExamPermanently(message) {
       isExamActive = false;
-      localStorage.setItem("asts_status", "LOCKED");
+      if (timerInterval) clearInterval(timerInterval);
+
+      if (localStorage.getItem("asts_status") !== "TIME_OUT") {
+        localStorage.setItem("asts_status", "LOCKED");
+      }
 
       let overlay = document.getElementById("lockOverlay");
       document.getElementById("lockTitle").innerText = "AKSES UJIAN DIBLOKIR!";
-      document.getElementById("lockMessage").innerText = "Anda telah melanggar aturan ujian sebanyak 3 kali.\n\nSilakan hubungi Proktor / Admin untuk pembukaan blokir.";
+      document.getElementById("lockMessage").innerText = message;
 
       document.getElementById("btnResume").classList.add("hidden");
       document.getElementById("adminArea").classList.remove("hidden");
       overlay.classList.remove("hidden");
     }
 
-    // Reset Ujian oleh Admin
-    function resetExamByAdmin() {
-      let inputPIN = prompt("Masukkan PIN Rahasia Admin / Pengawas:");
+    // Modal PIN Rahasia Admin / Proktor
+    function openPinModal() {
+      document.getElementById("adminPinInput").value = "";
+      document.getElementById("pinModal").classList.remove("hidden");
+      document.getElementById("adminPinInput").focus();
+    }
+
+    function closePinModal() {
+      document.getElementById("pinModal").classList.add("hidden");
+    }
+
+    function submitAdminPin() {
+      let inputPIN = document.getElementById("adminPinInput").value;
 
       if (inputPIN === ADMIN_PIN) {
         violationCount = 0;
         localStorage.removeItem("asts_violations");
         localStorage.removeItem("asts_status");
+        localStorage.removeItem("asts_end_time");
         
         alert("Siswa berhasil di-reset! Ujian dimuat kembali.");
+        closePinModal();
         document.getElementById("lockOverlay").classList.add("hidden");
         document.getElementById("violationCount").innerText = 0;
-        startExam();
-      } else if (inputPIN !== null) {
+        location.reload(); 
+      } else {
         alert("PIN Admin Salah!");
+        document.getElementById("adminPinInput").value = "";
+        document.getElementById("adminPinInput").focus();
       }
     }
   </script>
